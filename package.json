@@ -1,0 +1,50 @@
+{
+  "name": "keyboard-tester-web-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A comprehensive keyboard testing application with visual feedback and key detection",
+  "homepage": "https://keyboard-tester.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KurshedKhan/MyProject/tree/KeyboradTesting"
+  },
+  "keywords": [
+    "keyboard",
+    "tester",
+    "testing",
+    "key-detection",
+    "react",
+    "vite",
+    "tailwindcss"
+  ],
+  "author": "Kurshed Khan",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext js,jsx --fix"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "vite": "^7.1.12",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "lucide-react": "^0.468.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

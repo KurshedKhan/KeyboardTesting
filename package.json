@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "description": "A comprehensive keyboard testing application with visual feedback and key detection",
-  "homepage": "https://keyboard-tester.vercel.app",
+  "homepage": ".",
   "repository": {
     "type": "git",
-    "url": "https://github.com/KurshedKhan/MyProject/tree/KeyboradTesting"
+    "url": "https://github.com/KurshedKhan/keyboard-tester.git"
   },
   "keywords": [
     "keyboard",

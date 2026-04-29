@@ -233,7 +233,7 @@ export default function App() {
       document.removeEventListener('keydown', handleSpecialKeys, true);
       document.removeEventListener('keyup', handleSpecialKeys, true);
     };
-  }, [labelMap, playSound]);
+  }, [addRecent, labelMap, playSound]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -286,7 +286,7 @@ export default function App() {
 
     const interval = setInterval(checkClipboard, 500);
     return () => clearInterval(interval);
-  }, []);
+  }, [playSound]);
 
   const resetSession = () => {
     setActiveKeys(new Map());

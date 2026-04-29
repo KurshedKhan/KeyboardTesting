@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import HelpPanel from './components/HelpPanel.jsx';
 import Keyboard from './components/Keyboard.jsx';
+import KeyboardModeToggle from './components/KeyboardModeToggle.jsx';
 import LayoutToggle from './components/LayoutToggle.jsx';
+import MousePanel from './components/MousePanel.jsx';
 import StatusPanel from './components/StatusPanel.jsx';
 import { buildKeyLabelMap, layouts } from './data/keyboardLayouts.js';
 
@@ -43,6 +46,7 @@ function createBeep() {
 
 export default function App() {
   const [layoutType, setLayoutType] = useState('windows');
+  const [keyboardMode, setKeyboardMode] = useState('full');
   const [activeKeys, setActiveKeys] = useState(() => new Map());
   const [stuckCodes, setStuckCodes] = useState(() => new Set());
   const [activeMouseButtons, setActiveMouseButtons] = useState(() => new Set());
@@ -80,7 +84,7 @@ export default function App() {
   useEffect(() => {
     const handleKeyDown = (event) => {
       const formTag = event.target?.tagName?.toLowerCase();
-      if (['input', 'textarea', 'select'].includes(formTag)) return;
+      if (['input', 'textarea', 'select'].includes(formTag) && !event.target?.dataset?.keyCapture) return;
 
       event.preventDefault();
       
@@ -115,7 +119,7 @@ export default function App() {
     // Handle special keys that might not trigger keydown properly
     const handleSpecialKeys = (event) => {
       const formTag = event.target?.tagName?.toLowerCase();
-      if (['input', 'textarea', 'select'].includes(formTag)) return;
+      if (['input', 'textarea', 'select'].includes(formTag) && !event.target?.dataset?.keyCapture) return;
 
       // Try to capture keys that OS might intercept
       const specialKeys = {
@@ -134,8 +138,17 @@ export default function App() {
         'WakeUp': 'Wake',
         'AppSelect': 'App',
         'Help': 'Help',
+        'AudioVolumeMute': 'Mute',
+        'AudioVolumeDown': 'Vol-',
+        'AudioVolumeUp': 'Vol+',
+        'MediaTrackPrevious': 'Prev',
+        'MediaStop': 'Stop',
+        'MediaPlayPause': 'Play',
+        'MediaTrackNext': 'Next',
+        'LaunchMediaPlayer': 'Music',
         'LaunchMail': 'Mail',
         'LaunchApp2': 'Calc',
+        'LaunchExplorer': 'Files',
         'BrowserHome': 'Home',
         'BrowserSearch': 'Search',
         'BrowserFavorites': 'Fav',
@@ -288,7 +301,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, [playSound]);
 
-  const resetSession = () => {
+  const resetSession = useCallback(() => {
     setActiveKeys(new Map());
     setStuckCodes(new Set());
     setActiveMouseButtons(new Set());
@@ -296,32 +309,44 @@ export default function App() {
     setLatest(null);
     setTestedKeys(new Set());
     lastKeyTime.current = {};
+  }, []);
+
+  const changeKeyboardMode = (mode) => {
+    setKeyboardMode(mode);
+    resetSession();
   };
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#0b0f14] px-4 py-6 text-slate-100 sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-[1420px] flex-col gap-6">
-        <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-sm font-medium text-slate-400">Temporary session only</p>
-            <p className="mt-1 max-w-2xl text-sm text-slate-500">
-              Refreshing the page clears everything. No backend, database, or permanent storage.
-            </p>
+    <main className="min-h-screen overflow-x-hidden bg-[#0b0f14] px-3 py-4 text-slate-100 sm:px-5">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-4">
+        <header className="app-header">
+          <h1 className="text-lg font-semibold text-white sm:text-xl">Keyboard Tester</h1>
+          <div className="header-controls">
+            <KeyboardModeToggle mode={keyboardMode} onChange={changeKeyboardMode} />
+            <LayoutToggle layout={layoutType} onChange={setLayoutType} />
           </div>
-          <LayoutToggle layout={layoutType} onChange={setLayoutType} />
         </header>
 
         <StatusPanel
           latest={latest}
           recentKeys={recentKeys}
           activeCount={activeKeys.size}
-          activeMouseButtons={activeMouseButtons}
           soundEnabled={soundEnabled}
           onToggleSound={() => setSoundEnabled((value) => !value)}
           onReset={resetSession}
         />
 
-        <Keyboard layout={layout} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
+        <Keyboard
+          layout={layout}
+          activeCodes={activeCodes}
+          stuckCodes={stuckCodes}
+          testedKeys={testedKeys}
+          showNumpad={keyboardMode === 'full'}
+        />
+
+        <MousePanel activeMouseButtons={activeMouseButtons} />
+
+        <HelpPanel />
 
         {stuckCodes.size > 0 && (
           <div className="rounded-lg border border-rose-400/25 bg-rose-500/10 px-4 py-3 text-sm text-rose-100">

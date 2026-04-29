@@ -54,22 +54,39 @@ function Numpad({ rows, activeCodes, stuckCodes, testedKeys }) {
   );
 }
 
-export default function Keyboard({ layout, activeCodes, stuckCodes, testedKeys }) {
+export default function Keyboard({ layout, activeCodes, stuckCodes, testedKeys, showNumpad }) {
   return (
     <section className="keyboard-shell" aria-label={`${layout.name} keyboard layout`}>
-      <TopCluster groups={layout.top} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
-      <div className="keyboard-body">
-        <div className="main-board">
-          {layout.main.map((row, index) => (
-            <KeyRow key={index} keys={row} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
-          ))}
+      <div className="keyboard-frame">
+        <TopCluster groups={layout.media} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
+        <TopCluster groups={layout.top} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
+        <div className={`keyboard-body ${showNumpad ? '' : 'keyboard-body-compact'}`}>
+          <div className="main-board">
+            {layout.main.map((row, index) => (
+              <KeyRow
+                key={index}
+                keys={row}
+                activeCodes={activeCodes}
+                stuckCodes={stuckCodes}
+                testedKeys={testedKeys}
+              />
+            ))}
+          </div>
+          <div className="nav-board">
+            {layout.nav.map((row, index) => (
+              <KeyRow
+                key={index}
+                keys={row}
+                activeCodes={activeCodes}
+                stuckCodes={stuckCodes}
+                testedKeys={testedKeys}
+              />
+            ))}
+          </div>
+          {showNumpad && (
+            <Numpad rows={layout.numpad} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
+          )}
         </div>
-        <div className="nav-board">
-          {layout.nav.map((row, index) => (
-            <KeyRow key={index} keys={row} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
-          ))}
-        </div>
-        <Numpad rows={layout.numpad} activeCodes={activeCodes} stuckCodes={stuckCodes} testedKeys={testedKeys} />
       </div>
     </section>
   );

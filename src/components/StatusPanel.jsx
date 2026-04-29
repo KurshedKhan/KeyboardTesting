@@ -4,24 +4,31 @@ export default function StatusPanel({
   latest,
   recentKeys,
   activeCount,
-  activeMouseButtons,
   soundEnabled,
   onToggleSound,
   onReset,
 }) {
   return (
     <section className="status-panel">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <p className="text-sm uppercase tracking-[0.18em] text-teal-200/70">Keyboard Tester</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-normal text-white sm:text-4xl">
-            Pressed: <span className="text-teal-200">{latest?.name ?? 'Waiting'}</span>
-          </h1>
-          <p className="mt-2 text-sm text-slate-400">
-            Code: <span className="font-mono text-slate-200">{latest?.code ?? 'None'}</span>
-            <span className="mx-3 text-slate-600">/</span>
-            Active keys: <span className="font-mono text-slate-200">{activeCount}</span>
-          </p>
+      <div className="tester-input-wrap">
+        <label className="sr-only" htmlFor="key-tester-input">
+          Keyboard tester input
+        </label>
+        <input
+          className="tester-input"
+          id="key-tester-input"
+          data-key-capture="true"
+          readOnly
+          value={latest ? `${latest.name} / ${latest.code}` : ''}
+          placeholder="Press any keyboard key"
+        />
+        <div className="status-metrics">
+          <span>
+            Pressed <strong>{latest?.name ?? 'Waiting'}</strong>
+          </span>
+          <span>
+            Active <strong>{activeCount}</strong>
+          </span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -34,7 +41,7 @@ export default function StatusPanel({
         </div>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-3">
         <div className="recent-strip" aria-label="Recent pressed keys">
           {recentKeys.length === 0 ? (
             <span className="text-sm text-slate-500">Recent keys appear here</span>
@@ -46,18 +53,6 @@ export default function StatusPanel({
             ))
           )}
         </div>
-      </div>
-
-      <div className="mt-4 flex flex-wrap gap-2" aria-label="Mouse button tester">
-        {[
-          ['MouseLeft', 'Left Click'],
-          ['MouseMiddle', 'Middle Click'],
-          ['MouseRight', 'Right Click'],
-        ].map(([code, label]) => (
-          <span className={`mouse-chip ${activeMouseButtons.has(code) ? 'mouse-chip-active' : ''}`} key={code}>
-            {label}
-          </span>
-        ))}
       </div>
     </section>
   );

@@ -15,6 +15,36 @@ const functionKeys = [
   'F12',
 ].map((code) => ({ code, label: code, size: 1 }));
 
+const mediaKeys = [
+  [
+    { code: 'Fn', label: 'Fn', prefix: 'Fn +', icon: 'volumeUp', size: 1.55 },
+  ],
+  [
+    { code: 'AudioVolumeMute', label: 'Mute', icon: 'mute' },
+    { code: 'AudioVolumeDown', label: 'Vol-', icon: 'volumeDown' },
+    { code: 'AudioVolumeUp', label: 'Vol+', icon: 'volumeUp' },
+    { code: 'MediaTrackPrevious', label: 'Prev', icon: 'previous' },
+    { code: 'MediaStop', label: 'Stop', icon: 'stop' },
+    { code: 'MediaPlayPause', label: 'Play', icon: 'play' },
+    { code: 'MediaTrackNext', label: 'Next', icon: 'next' },
+    { code: 'LaunchMediaPlayer', label: 'Music', icon: 'music' },
+  ],
+  [
+    { code: 'BrowserHome', label: 'Web', icon: 'globe' },
+    { code: 'BrowserBack', label: 'Back', icon: 'back' },
+    { code: 'BrowserForward', label: 'Fwd', icon: 'next' },
+    { code: 'BrowserRefresh', label: 'Refresh', icon: 'refresh' },
+    { code: 'BrowserStop', label: 'Stop', icon: 'close' },
+    { code: 'BrowserSearch', label: 'Search', icon: 'search' },
+    { code: 'BrowserFavorites', label: 'Fav', icon: 'favorite' },
+  ],
+  [
+    { code: 'LaunchMail', label: 'Mail', icon: 'mail' },
+    { code: 'LaunchApp2', label: 'Calc', icon: 'calculator' },
+    { code: 'LaunchExplorer', label: 'Files', icon: 'files' },
+  ],
+];
+
 const windowsMain = [
   [
     { code: 'Backquote', label: '`', shifted: '~' },
@@ -130,6 +160,7 @@ const numpad = [
 export const layouts = {
   windows: {
     name: 'Windows',
+    media: mediaKeys,
     top: [esc, functionKeys.slice(0, 4), functionKeys.slice(4, 8), functionKeys.slice(8, 12)],
     main: windowsMain,
     nav: navigation,
@@ -137,6 +168,7 @@ export const layouts = {
   },
   mac: {
     name: 'Mac',
+    media: mediaKeys,
     top: [
       esc,
       functionKeys.slice(0, 3),
@@ -161,6 +193,7 @@ export function buildKeyLabelMap(layout) {
   };
 
   collect(layout.top);
+  collect(layout.media);
   collect(layout.main);
   collect(layout.nav);
   collect(layout.numpad);
